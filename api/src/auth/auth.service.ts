@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Login_i } from './auth.interface';
-import { verifyHashedPassword } from 'src/app.util';
+import { hashPassword, verifyHashedPassword } from 'src/app.util';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -27,16 +28,26 @@ export class AuthService {
     if (isPasswordMatch) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...rest } = user;
-      const token = {
-        access_token: this.jwtService.sign(rest),
-      };
       return {
         ...rest,
-        ...token,
+        access_token: this.jwtService.sign(rest),
       };
     } else {
       throw new Error('Incorrect Password');
     }
   }
-  async register() {}
+
+  async register(dto: Prisma.UserCreateInput) {
+    const { password, ...rest } = dto;
+    await this.prismaService.user.create({
+      data: {
+        ...rest,
+        password: await hashPassword(password),
+      },
+    });
+    return {
+      ...rest,
+      access_token: this.jwtService.sign(rest),
+    };
+  }
 }
