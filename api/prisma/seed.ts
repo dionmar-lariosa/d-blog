@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
+import { hashPassword } from '../src/utils/password.util';
 
 const prisma = new PrismaClient();
 async function main() {
@@ -7,9 +8,11 @@ async function main() {
     data: {
       name: faker.person.fullName(),
       email: faker.internet.email(),
+      password: await hashPassword('test'),
       posts: {
         createMany: {
           data: [1, 2, 3].map(() => ({
+            uuid: faker.string.uuid(),
             title: faker.lorem.word(),
             content: faker.lorem.paragraphs(),
           })),
