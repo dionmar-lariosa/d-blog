@@ -1,0 +1,26 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "start:dev",
+			"problemMatcher": [],
+			"label": "npm: start:dev",
+			"detail": "nest start --watch"
+		},
+		{
+			"type": "npm",
+			"script": "format",
+			"problemMatcher": [],
+			"label": "npm: format",
+			"detail": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"prisma/*.ts\""
+		},
+		{
+			"type": "npm",
+			"script": "prisma:reset",
+			"problemMatcher": [],
+			"label": "npm: prisma:reset",
+			"detail": "npx prisma migrate reset"
+		}
+	]
+}
