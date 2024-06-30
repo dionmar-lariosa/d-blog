@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { verifyHashedPassword } from 'src/utils/password.util';
 import { Login_i } from './auth.interface';
+import { verifyHashedPassword } from 'src/app.util';
 
 @Injectable()
 export class AuthService {
