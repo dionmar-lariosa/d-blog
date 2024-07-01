@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 async function main() {
   const userWithPosts = await prisma.user.create({
     data: {
+      uuid: faker.string.uuid(),
       name: faker.person.fullName(),
       email: faker.internet.email(),
       password: await hashPassword('test'),

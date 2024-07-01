@@ -6,8 +6,10 @@ import {
   InternalServerErrorException,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
+  Request,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { Prisma } from '@prisma/client';
@@ -28,28 +30,40 @@ export class PostController {
     }
   }
 
-  @Get(':id')
-  async get(@Param('id', ParseIntPipe) id: number) {
+  @Get(':uuid')
+  async get(@Param('uuid') uuid: string) {
     try {
-      return await this.postService.get(id);
+      return await this.postService.get(uuid);
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }
   }
 
   @Post()
-  async create(@Body() dto: Prisma.PostCreateInput) {
+  async create(@Request() req, @Body() dto: Prisma.PostCreateInput) {
     try {
-      return await this.postService.create(dto);
+      return await this.postService.create(req.user, dto);
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }
   }
 
-  @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number) {
+  @Patch(':uuid')
+  async update(
+    @Param('uuid') uuid: string,
+    @Body() dto: Prisma.PostUpdateInput,
+  ) {
     try {
-      return await this.postService.delete(id);
+      return await this.postService.update(uuid, dto);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  @Delete(':uuid')
+  async delete(@Param('uuid') uuid: string) {
+    try {
+      return await this.postService.delete(uuid);
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }
