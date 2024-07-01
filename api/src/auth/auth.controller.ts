@@ -2,7 +2,9 @@ import { Body, Controller, Post, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Login_i } from './auth.interface';
 import { Prisma } from '@prisma/client';
+import { Public } from 'src/app.decorator';
 
+@Public()
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
