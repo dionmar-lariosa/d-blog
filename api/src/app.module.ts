@@ -8,6 +8,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
 import { UserModule } from './user/user.module';
 import { CaslModule } from './casl/casl.module';
+import { CaslGuard } from './casl/casl.guard';
 
 @Module({
   imports: [PostModule, PrismaModule, AuthModule, UserModule, CaslModule],
@@ -17,6 +18,10 @@ import { CaslModule } from './casl/casl.module';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: CaslGuard,
     },
   ],
 })

@@ -6,6 +6,7 @@ import {
   InferSubjects,
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
+import { TokenPayload_i } from 'src/auth/auth.interface';
 import { Post } from 'src/post/post';
 import { User } from 'src/user/user';
 
@@ -17,27 +18,23 @@ export enum Action {
   Delete = 'delete',
 }
 
-type Subjects = InferSubjects<typeof Post | typeof User> | 'all';
+export type Subjects = InferSubjects<typeof Post | typeof User> | 'all';
 export type AppAbility = Ability<[Action, Subjects]>;
 
 @Injectable()
 export class CaslAbilityFactory {
-  defineAbility(user: User) {
+  defineAbility(user: TokenPayload_i) {
     const { can, cannot, build } = new AbilityBuilder<
       Ability<[Action, Subjects]>
     >(Ability as AbilityClass<AppAbility>);
 
     if (user.isAdmin) {
-      can(Action.Manage, 'all'); // read-write access to everything
+      can(Action.Manage, User);
     } else {
-      can(Action.Read, 'all'); // read-only access to everything
+      cannot(Action.Manage, User).because('action only for admin');
     }
 
-    can(Action.Update, Post, { userId: user.id });
-    cannot(Action.Delete, Post, { userId: user.id });
-
     return build({
-      // Read https://casl.js.org/v6/en/guide/subject-type-detection#use-classes-as-subject-types for details
       detectSubjectType: (item) =>
         item.constructor as ExtractSubjectType<Subjects>,
     });

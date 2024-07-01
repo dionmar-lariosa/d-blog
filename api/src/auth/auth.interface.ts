@@ -4,7 +4,9 @@ export interface Login_i {
 }
 
 export interface TokenPayload_i {
+  id: number;
   uuid: string;
   email: string;
   name: string;
+  isAdmin: boolean;
 }
