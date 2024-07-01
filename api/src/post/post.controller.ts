@@ -6,6 +6,7 @@ import {
   InternalServerErrorException,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   Request,
@@ -42,6 +43,18 @@ export class PostController {
   async create(@Request() req, @Body() dto: Prisma.PostCreateInput) {
     try {
       return await this.postService.create(req.user, dto);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  @Patch(':uuid')
+  async update(
+    @Param('uuid') uuid: string,
+    @Body() dto: Prisma.PostUpdateInput,
+  ) {
+    try {
+      return await this.postService.update(uuid, dto);
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }

@@ -30,6 +30,10 @@ export class PostService {
     });
   }
 
+  async update(uuid: string, dto: Prisma.PostUpdateInput) {
+    return await this.prismaService.post.update({ where: { uuid }, data: dto });
+  }
+
   async get(uuid: string) {
     return await this.prismaService.post.findUniqueOrThrow({ where: { uuid } });
   }
