@@ -18,12 +18,11 @@ export enum Action {
 }
 
 type Subjects = InferSubjects<typeof Post | typeof User> | 'all';
-
 export type AppAbility = Ability<[Action, Subjects]>;
 
 @Injectable()
 export class CaslAbilityFactory {
-  createForUser(user: User) {
+  defineAbility(user: User) {
     const { can, cannot, build } = new AbilityBuilder<
       Ability<[Action, Subjects]>
     >(Ability as AbilityClass<AppAbility>);
