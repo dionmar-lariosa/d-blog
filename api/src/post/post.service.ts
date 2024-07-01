@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { generateUuid } from 'src/app.util';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -17,6 +18,7 @@ export class PostService {
     return await this.prismaService.post.create({
       data: {
         ...dto,
+        uuid: generateUuid(),
         user: {
           connect: { id: 1 },
         },
