@@ -9,12 +9,14 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { IS_PUBLIC_KEY } from 'src/app.decorator';
 import { TokenPayload_i } from './auth.interface';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     private reflector: Reflector,
+    private prismaService: PrismaService,
   ) {}
 
   async canActivate(context: ExecutionContext) {
@@ -38,7 +40,10 @@ export class AuthGuard implements CanActivate {
       });
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
-      request['user'] = payload;
+      const user = await this.prismaService.user.findUniqueOrThrow({
+        where: { uuid: payload.uuid },
+      });
+      request['user'] = user;
     } catch {
       throw new UnauthorizedException();
     }

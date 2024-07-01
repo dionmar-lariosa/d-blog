@@ -22,9 +22,11 @@ export class AuthService {
     );
     if (isPasswordMatch) {
       const payload: TokenPayload_i = {
+        id: user.id,
         uuid: user.uuid,
         email: user.email,
         name: user.name,
+        isAdmin: user.isAdmin,
       };
       return {
         ...payload,
@@ -45,9 +47,11 @@ export class AuthService {
       },
     });
     const payload: TokenPayload_i = {
+      id: newUser.id,
       uuid: newUser.uuid,
       email: newUser.email,
       name: newUser.name,
+      isAdmin: newUser.isAdmin,
     };
     return {
       ...payload,
