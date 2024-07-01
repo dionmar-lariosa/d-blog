@@ -29,10 +29,10 @@ export class PostController {
     }
   }
 
-  @Get(':id')
-  async get(@Param('id', ParseIntPipe) id: number) {
+  @Get(':uuid')
+  async get(@Param('uuid') uuid: string) {
     try {
-      return await this.postService.get(id);
+      return await this.postService.get(uuid);
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }
@@ -47,10 +47,10 @@ export class PostController {
     }
   }
 
-  @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number) {
+  @Delete(':uuid')
+  async delete(@Param('uuid') uuid: string) {
     try {
-      return await this.postService.delete(id);
+      return await this.postService.delete(uuid);
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }

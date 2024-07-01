@@ -30,11 +30,11 @@ export class PostService {
     });
   }
 
-  async get(id: number) {
-    return await this.prismaService.post.findUniqueOrThrow({ where: { id } });
+  async get(uuid: string) {
+    return await this.prismaService.post.findUniqueOrThrow({ where: { uuid } });
   }
 
-  async delete(id: number) {
-    return await this.prismaService.post.delete({ where: { id } });
+  async delete(uuid: string) {
+    return await this.prismaService.post.delete({ where: { uuid } });
   }
 }
