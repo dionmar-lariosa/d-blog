@@ -13,6 +13,9 @@ import {
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { Prisma } from '@prisma/client';
+import { CheckAbilities } from 'src/app.decorator';
+import { Action } from 'src/casl/casl-ability.factory/casl-ability.factory';
+import { PostEntity } from './post-entity';
 
 @Controller('posts')
 export class PostController {
@@ -49,6 +52,7 @@ export class PostController {
   }
 
   @Patch(':uuid')
+  @CheckAbilities({ action: Action.Update, subject: PostEntity })
   async update(
     @Param('uuid') uuid: string,
     @Body() dto: Prisma.PostUpdateInput,

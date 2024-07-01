@@ -8,14 +8,14 @@ import {
 import { UserService } from './user.service';
 import { CheckAbilities } from 'src/app.decorator';
 import { Action } from 'src/casl/casl-ability.factory/casl-ability.factory';
-import { User } from './user';
+import { UserEntity } from './user-entity';
 
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
-  @CheckAbilities({ action: Action.Manage, subject: User })
+  @CheckAbilities({ action: Action.Manage, subject: UserEntity })
   async getAll(
     @Query('cursor', ParseIntPipe) cursor: number = 0,
     @Query('pageSize', ParseIntPipe) pageSize: number = 10,

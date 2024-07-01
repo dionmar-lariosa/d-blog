@@ -1,4 +1,4 @@
-export class Post {
+export class PostEntity {
   uuid: string;
   userId: number;
 }

@@ -7,8 +7,8 @@ import {
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
 import { TokenPayload_i } from 'src/auth/auth.interface';
-import { Post } from 'src/post/post';
-import { User } from 'src/user/user';
+import { PostEntity } from 'src/post/post-entity';
+import { UserEntity } from 'src/user/user-entity';
 
 export enum Action {
   Manage = 'manage',
@@ -18,7 +18,9 @@ export enum Action {
   Delete = 'delete',
 }
 
-export type Subjects = InferSubjects<typeof Post | typeof User> | 'all';
+export type Subjects =
+  | InferSubjects<typeof PostEntity | typeof UserEntity>
+  | 'all';
 export type AppAbility = Ability<[Action, Subjects]>;
 
 @Injectable()
@@ -29,10 +31,13 @@ export class CaslAbilityFactory {
     >(Ability as AbilityClass<AppAbility>);
 
     if (user.isAdmin) {
-      can(Action.Manage, User);
+      can(Action.Manage, UserEntity);
     } else {
-      cannot(Action.Manage, User).because('action only for admin');
+      cannot(Action.Manage, UserEntity).because('action only for admin');
     }
+
+    can(Action.Update, PostEntity, { userId: user.id });
+    cannot(Action.Delete, PostEntity, { userId: user.id });
 
     return build({
       detectSubjectType: (item) =>
