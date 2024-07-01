@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Post,
   Query,
+  Request,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { Prisma } from '@prisma/client';
@@ -38,9 +39,9 @@ export class PostController {
   }
 
   @Post()
-  async create(@Body() dto: Prisma.PostCreateInput) {
+  async create(@Request() req, @Body() dto: Prisma.PostCreateInput) {
     try {
-      return await this.postService.create(dto);
+      return await this.postService.create(req.user, dto);
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }
